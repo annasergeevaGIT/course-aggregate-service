@@ -33,9 +33,10 @@ public class AggregateServiceImpl implements AggregateService {
     private final FeedbacksClient feedbacksClient;
     private final CourseAggregateMapper mapper;
 
+
     @Override
     public Mono<CourseAggregate> getCourseAggregateInfo(Long courseId, FeedbackSort sort, int from, int size) {
-        return Mono.zip(
+        return Mono.zip( //Zip combines the provided Mono instances into one. The resulting Mono completes when all source Monos emit their values. If at least one of the source Monos fails, the others are canceled, and the resulting Mono also completes with an error, which we handle using Mono.doOnError().
                         values -> mapper.createCourseAggregate((Course) values[0], (RatedFeedbacksList) values[1]),
                         courseClient.getCourse(courseId),
                         feedbacksClient.getFeedbacksWithCourseRating(courseId, from, size, sort)
@@ -46,7 +47,8 @@ public class AggregateServiceImpl implements AggregateService {
     @Override
     public Mono<CourseAggregateList> getCoursesWithRatings(Category category, RatedCourseSort sort) {
         return courseClient.getCoursesForCategory(category, sort)
-                .flatMap(items -> getRatingsForCourses(items)
+                .flatMap(items -> getRatingsForCourses(items) // convert from Mono<List<MenuItem>> into Mono<MenuAggregateList>. The difference between Mono.map() and Mono.flatMap() is that
+                        //map() receives and returns a plain value, while flatMap() receives a value but returns another Mono<>.
                         .map(ratingsMap -> mapper.createCourseAggregateList(ratingsMap, items, sort)))
                 .doOnError(t -> log.error("Failed to getCoursesWithRatings: {}", t.toString()));
     }

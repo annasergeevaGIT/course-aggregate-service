@@ -10,15 +10,18 @@ on:
 jobs:
   build-and-test:
     name: Building and Testing the app
-    runs-on: ubuntu-22.04 
+    runs-on: ubuntu-22.04
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
           cache: gradle
+
       - name: build, tests
         run: |
           chmod +x gradlew

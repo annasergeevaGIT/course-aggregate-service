@@ -1,7 +1,7 @@
 services:
-  course-aggregate-service:
-    image: "course-aggregate-service"
-    container_name: "course-aggregate-service"
+  aggregate-service:
+    image: "aggregate-service"
+    container_name: "aggregate-service"
     ports:
       - "8084:8084"
     environment:
