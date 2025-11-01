@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     public Mono<ResponseEntity<ProblemDetail>> handleHandlerMethodValidationException(HandlerMethodValidationException ex, ServerHttpRequest request) {
         var pd = ex.getBody();
         Map<String, String> errors = new HashMap<>();
-        ex.getAllValidationResults().forEach(result -> { // with older Spring Boot 3.3.5 and the latest Spring Cloud 2023 release
+        ex.getParameterValidationResults().forEach(result -> { // with older Spring Boot 3.5.0 and the latest Spring Cloud 2025 release
             result.getResolvableErrors().forEach(e -> {
                 errors.put(result.getMethodParameter().getParameterName(), e.getDefaultMessage());
             });
