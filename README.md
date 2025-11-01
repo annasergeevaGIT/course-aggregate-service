@@ -5,13 +5,13 @@ It aggregates and exposes comprehensive course information — combining course 
 
 ## Related Services
 
-| Service                                                                 | Description                       |
-|-------------------------------------------------------------------------|-----------------------------------|
-| [Course Service](https://github.com/annasergeevaGIT/course-service)     | Handles courses                   |
-| [Feedback Service](https://github.com/annasergeevaGIT/feedback-service) | Manages user feedback             |
-| [Enrollment Service](https://github.com/annasergeevaGIT/enrollment-service)                       | Aggregates course and review data |
-| [Gateway Service](../gateway-service)                                   | Routes requests to microservices  |
-| [Config Server](../config-server)                                       | Centralized configuration storage |
+| Service                                                                 | Description                         |
+|-------------------------------------------------------------------------|-------------------------------------|
+| [Course Service](https://github.com/annasergeevaGIT/course-service)     | Handles courses                     |
+| [Feedback Service](https://github.com/annasergeevaGIT/feedback-service) | Manages user feedback               |
+| [Enrollment Service](https://github.com/annasergeevaGIT/enrollment-service)                       | Aggregates course and feedback data |
+| [Gateway Service](../gateway-service)                                   | Routes requests to microservices    |
+| [Config Server](../config-server)                                       | Centralized configuration storage   |
 
 ## Overview
 

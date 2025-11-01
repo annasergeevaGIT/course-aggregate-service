@@ -1,0 +1,74 @@
+[
+  {
+    "id": 3,
+    "name": "Three",
+    "description": "Nice Item Three",
+    "price": 10.1,
+    "category": "ENGINEERING",
+    "duration": 1000,
+    "difficulty": "BEGINNER",
+    "imageUrl": "http://images.com/three.png",
+    "updatedAt": "2024-03-20T11:01:37.942606",
+    "createdAt": "2024-03-20T11:01:37.942576",
+    "moduleCollection": {
+      "modules": [
+        {
+          "name": "module one",
+          "duration": 10
+        },
+        {
+          "name": "module two",
+          "duration": 20
+        }
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "name": "Two",
+    "description": "Nice Item Two",
+    "price": 10.1,
+    "category": "ENGINEERING",
+    "duration": 1000,
+    "difficulty": "BEGINNER",
+    "imageUrl": "http://images.com/two.png",
+    "updatedAt": "2024-03-20T11:01:34.574555",
+    "createdAt": "2024-03-20T11:01:34.574508",
+    "moduleCollection": {
+      "modules": [
+        {
+          "name": "module one",
+          "duration": 10
+        },
+        {
+          "name": "module two",
+          "duration": 20
+        }
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "name": "One",
+    "description": "Nice Item One",
+    "price": 10.1,
+    "category": "ENGINEERING",
+    "duration": 1000,
+    "difficulty": "BEGINNER",
+    "imageUrl": "http://images.com/one.png",
+    "updatedAt": "2024-03-20T11:01:30.043025",
+    "createdAt": "2024-03-20T11:01:30.042833",
+    "moduleCollection": {
+      "modules": [
+        {
+          "name": "module one",
+          "duration": 10
+        },
+        {
+          "name": "module two",
+          "duration": 20
+        }
+      ]
+    }
+  }
+]

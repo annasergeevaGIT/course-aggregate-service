@@ -1,0 +1,109 @@
+services:
+  course-aggregate-service:
+    image: "course-aggregate-service"
+    container_name: "course-aggregate-service"
+    ports:
+      - "8084:8084"
+    environment:
+      - EXTERNAL_COURSE_SERVICE_URL=http://course-service:8081
+      - EXTERNAL_FEEDBACK_SERVICE_URL=http://feedback-service:8083
+
+  feedback-service:
+    image: "feedback-service"
+    container_name: "feedback-service"
+    depends_on:
+      postgres-feedbacks:
+        condition: service_healthy
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-feedbacks:6433/feedback_service_db
+
+  enrollment-service:
+    image: "enrollment-service"
+    container_name: "enrollment-service"
+    depends_on:
+      postgres-enrollments:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_R2DBC_URL=r2dbc:postgresql://postgres-enrollments:6432/enrollment_service_db
+      - SPRING_FLYWAY_URL=jdbc:postgresql://postgres-enrollments:6432/enrollment_service_db
+      - EXTERNAL_COURSE_SERVICE_URL=http://course-service:8081
+
+  course-service:
+    image: "course-service"
+    container_name: "course-service"
+    depends_on:
+      postgres-courses:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-courses:6431/course_service_db
+
+  postgres-courses:
+    image: "postgres:16.1"
+    container_name: "postgres-courses"
+    ports:
+      - "6431:6431"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=course_service_db
+      - PGPORT=6431
+    volumes:
+      - db-courses:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "course_service_db" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
+  postgres-enrollments:
+    image: "postgres:16.1"
+    container_name: "postgres-enrollments"
+    ports:
+      - "6432:6432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=enrollment_service_db
+      - PGPORT=6432
+    volumes:
+      - db-enrollments:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "enrollment_service_db" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
+  postgres-feedbacks:
+    image: "postgres:16.1"
+    container_name: "postgres-feedbacks"
+    ports:
+      - "6433:6433"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=feedback_service_db
+      - PGPORT=6433
+    volumes:
+      - db-feedbacks:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "feedback_service_db" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
+volumes:
+  db-feedbacks:
+    driver: local
+  db-enrollments:
+    driver: local
+  db-courses:
+    driver: local
