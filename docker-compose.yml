@@ -1,12 +1,33 @@
 services:
+  config-server-e-learning-platform:
+    image: "config-server-e-learning-platform"
+    container_name: "config-server-e-learning-platform"
+    environment:
+      - THC_PATH=/actuator/health
+      - THC_PORT=8085
+    ports:
+      - "8085:8085"
+    healthcheck:
+      test: [ "CMD", "/cnb/process/health-check" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
   aggregate-service:
     image: "aggregate-service"
     container_name: "aggregate-service"
     ports:
       - "8084:8084"
+    depends_on:
+      config-server-e-learning-platform:
+        condition: service_healthy
     environment:
-      - EXTERNAL_COURSE_SERVICE_URL=http://course-service:8081
-      - EXTERNAL_FEEDBACK_SERVICE_URL=http://feedback-service:8083
+      - CONFIGSERVER_IMPORT=configserver:${CONFIG_SERVER_URL}
+      - SPRING_CLOUD_CONFIG_FAIL_FAST=true
+      - SPRING_PROFILES_ACTIVE=prod
+      - COURSE_SERVICE_URL=${COURSE_SERVICE_URL}
+      - FEEDBACK_SERVICE_URL=${FEEDBACK_SERVICE_URL}
 
   feedback-service:
     image: "feedback-service"
@@ -14,10 +35,17 @@ services:
     depends_on:
       postgres-feedbacks:
         condition: service_healthy
+      config-server-e-learning-platform:
+        condition: service_healthy
     ports:
       - "8083:8083"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-feedbacks:6433/feedback_service_db
+      - CONFIGSERVER_IMPORT=configserver:${CONFIG_SERVER_URL}
+      - SPRING_CLOUD_CONFIG_FAIL_FAST=true
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_USER=${FEEDBACK_DB_USER}
+      - DB_PASSWORD=${FEEDBACK_DB_PASSWORD}
+      - DB_URL=${FEEDBACK_DB_URL}
 
   enrollment-service:
     image: "enrollment-service"
@@ -25,12 +53,19 @@ services:
     depends_on:
       postgres-enrollments:
         condition: service_healthy
+      config-server-e-learning-platform:
+        condition: service_healthy
     ports:
       - "8082:8082"
     environment:
-      - SPRING_R2DBC_URL=r2dbc:postgresql://postgres-enrollments:6432/enrollment_service_db
-      - SPRING_FLYWAY_URL=jdbc:postgresql://postgres-enrollments:6432/enrollment_service_db
-      - EXTERNAL_COURSE_SERVICE_URL=http://course-service:8081
+      - CONFIGSERVER_IMPORT=configserver:${CONFIG_SERVER_URL}
+      - SPRING_CLOUD_CONFIG_FAIL_FAST=true
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_USER=${ENROLLMENTS_DB_USER}
+      - DB_PASSWORD=${ENROLLMENTS_DB_PASSWORD}
+      - DB_URL=${ENROLLMENTS_DB_URL}
+      - FLYWAY_DB_URL=${ENROLLMENTS_DB_FLYWAY_URL}
+      - COURSE_SERVICE_URL=${COURSE_SERVICE_URL}
 
   course-service:
     image: "course-service"
@@ -38,10 +73,17 @@ services:
     depends_on:
       postgres-courses:
         condition: service_healthy
+      config-server-e-learning-platform:
+        condition: service_healthy
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-courses:6431/course_service_db
+      - CONFIGSERVER_IMPORT=configserver:${CONFIG_SERVER_URL}
+      - SPRING_CLOUD_CONFIG_FAIL_FAST=true
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_USER=${COURSE_DB_USER}
+      - DB_PASSWORD=${COURSE_DB_PASSWORD}
+      - DB_URL=${COURSE_DB_URL}
 
   postgres-courses:
     image: "postgres:16.1"
@@ -68,8 +110,8 @@ services:
     ports:
       - "6432:6432"
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=${ENROLLMENTS_DB_USER}
+      - POSTGRES_PASSWORD=${ENROLLMENTS_DB_PASSWORD}
       - POSTGRES_DB=enrollment_service_db
       - PGPORT=6432
     volumes:
@@ -87,8 +129,8 @@ services:
     ports:
       - "6433:6433"
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=${FEEDBACK_DB_USER}
+      - POSTGRES_PASSWORD=${FEEDBACK_DB_PASSWORD}
       - POSTGRES_DB=feedback_service_db
       - PGPORT=6433
     volumes:
