@@ -108,7 +108,7 @@ services:
     image: "postgres:16.1"
     container_name: "postgres-enrollments"
     ports:
-      - "15432:5432"
+      - "6432:5432"
     environment:
       - POSTGRES_USER=${ENROLLMENTS_DB_USER}
       - POSTGRES_PASSWORD=${ENROLLMENTS_DB_PASSWORD}
