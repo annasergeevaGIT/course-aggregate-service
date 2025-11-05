@@ -4,9 +4,9 @@ services:
     container_name: "config-server-e-learning-platform"
     environment:
       - THC_PATH=/actuator/health
-      - THC_PORT=8085
+      - THC_PORT=9095
     ports:
-      - "8085:8085"
+      - "9095:9095"
     healthcheck:
       test: [ "CMD", "/cnb/process/health-check" ]
       interval: 15s
@@ -18,7 +18,7 @@ services:
     image: "aggregate-service"
     container_name: "aggregate-service"
     ports:
-      - "8084:8084"
+      - "9094:9094"
     depends_on:
       config-server-e-learning-platform:
         condition: service_healthy
@@ -38,7 +38,7 @@ services:
       config-server-e-learning-platform:
         condition: service_healthy
     ports:
-      - "8083:8083"
+      - "9093:9093"
     environment:
       - CONFIGSERVER_IMPORT=configserver:${CONFIG_SERVER_URL}
       - SPRING_CLOUD_CONFIG_FAIL_FAST=true
@@ -56,7 +56,7 @@ services:
       config-server-e-learning-platform:
         condition: service_healthy
     ports:
-      - "8082:8082"
+      - "9092:9092"
     environment:
       - CONFIGSERVER_IMPORT=configserver:${CONFIG_SERVER_URL}
       - SPRING_CLOUD_CONFIG_FAIL_FAST=true
@@ -76,7 +76,7 @@ services:
       config-server-e-learning-platform:
         condition: service_healthy
     ports:
-      - "8081:8081"
+      - "9091:9091"
     environment:
       - CONFIGSERVER_IMPORT=configserver:${CONFIG_SERVER_URL}
       - SPRING_CLOUD_CONFIG_FAIL_FAST=true
@@ -89,12 +89,12 @@ services:
     image: "postgres:16.1"
     container_name: "postgres-courses"
     ports:
-      - "6431:6431"
+      - "5431:5431"
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=course_service_db
-      - PGPORT=6431
+      - PGPORT=5431
     volumes:
       - db-courses:/var/lib/postgresql/data
     healthcheck:
@@ -108,12 +108,11 @@ services:
     image: "postgres:16.1"
     container_name: "postgres-enrollments"
     ports:
-      - "6432:6432"
+      - "15432:5432"
     environment:
       - POSTGRES_USER=${ENROLLMENTS_DB_USER}
       - POSTGRES_PASSWORD=${ENROLLMENTS_DB_PASSWORD}
       - POSTGRES_DB=enrollment_service_db
-      - PGPORT=6432
     volumes:
       - db-enrollments:/var/lib/postgresql/data
     healthcheck:
@@ -127,12 +126,12 @@ services:
     image: "postgres:16.1"
     container_name: "postgres-feedbacks"
     ports:
-      - "6433:6433"
+      - "5433:5433"
     environment:
       - POSTGRES_USER=${FEEDBACK_DB_USER}
       - POSTGRES_PASSWORD=${FEEDBACK_DB_PASSWORD}
       - POSTGRES_DB=feedback_service_db
-      - PGPORT=6433
+      - PGPORT=5433
     volumes:
       - db-feedbacks:/var/lib/postgresql/data
     healthcheck:
