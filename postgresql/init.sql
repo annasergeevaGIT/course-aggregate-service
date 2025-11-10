@@ -1,0 +1,3 @@
+CREATE DATABASE course_service_db;
+CREATE DATABASE enrollment_service_db;
+CREATE DATABASE feedback_service_db;

@@ -44,6 +44,7 @@ dependencies {
 	implementation "org.springdoc:springdoc-openapi-starter-webflux-ui:${springDocVersion}"
 	implementation 'org.springframework.cloud:spring-cloud-starter-config' //config server
 	implementation 'org.springframework.retry:spring-retry' //config server
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'

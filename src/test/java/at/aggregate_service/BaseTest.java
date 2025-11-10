@@ -52,6 +52,8 @@ public abstract class BaseTest {
         registry.add("external.retry-count", () -> "3");
         registry.add("external.default-timeout", () -> "1s");
         registry.add("resilience4j.circuitbreaker.configs.default.minimum-number-of-calls", () -> "6");
+        registry.add("eureka.client.enabled", () -> "false");
+        registry.add("spring.cloud.loadbalancer.enabled", () -> "false");
     }
 
     @BeforeEach

@@ -1,5 +1,6 @@
 package at.aggregate_service.client;
 
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,6 +13,7 @@ declare WebClient.Builder in a configuration class.
 @Configuration
 public class WebClientConfig { //avoid blocking request threads using non-blocking WebClient for external calls
 
+    @LoadBalanced
     @Bean
     public WebClient.Builder webclientBuilder() {
         return WebClient.builder();
