@@ -7,6 +7,7 @@ import at.aggregate_service.exception.CourseAggregateException;
 import at.aggregate_service.props.ExternalServiceProps;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -31,12 +32,10 @@ public class CourseClient extends BaseClient {
     private static final String COURSE_BACKEND = "courseBackend";
     private final WebClient webClient;
 
-    public CourseClient(WebClient.Builder clientBuilder,
+    public CourseClient(@Qualifier("courseWebClient") WebClient courseWebClient,
                         ExternalServiceProps props) {
         super(props);
-        this.webClient = clientBuilder
-                .baseUrl(props.getCourseServiceUrl())
-                .build();
+        this.webClient = courseWebClient;
     }
 
     @CircuitBreaker(name = COURSE_BACKEND)

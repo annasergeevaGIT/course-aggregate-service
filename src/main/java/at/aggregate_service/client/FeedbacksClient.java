@@ -9,6 +9,7 @@ import at.aggregate_service.props.ExternalServiceProps;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -23,12 +24,10 @@ public class FeedbacksClient extends BaseClient {
 
     private final WebClient webClient;
 
-    public FeedbacksClient(WebClient.Builder webclientBuilder,
+    public FeedbacksClient(@Qualifier("feedbacksWebClient") WebClient feedbacksWebClient,
                            ExternalServiceProps props) {
         super(props);
-        this.webClient = webclientBuilder
-                .baseUrl(props.getFeedbackServiceUrl())
-                .build();
+        this.webClient = feedbacksWebClient;
     }
 
     @CircuitBreaker(name = FEEDBACK_BACKEND, fallbackMethod = "getFeedbacksWithCourseRatingCBFallback")
