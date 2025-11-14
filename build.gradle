@@ -33,6 +33,7 @@ ext {
 	springDocVersion = '2.5.0'
 	springCloudVersion ='2025.0.0'
 	wiremockVersion='3.3.1'
+	lokiAppenderVersion = '2.0.1'
 }
 
 dependencies {
@@ -48,6 +49,8 @@ dependencies {
 	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
 	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
 	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+	runtimeOnly "com.github.loki4j:loki-logback-appender:${lokiAppenderVersion}"
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
